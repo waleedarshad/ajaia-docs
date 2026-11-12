@@ -5,7 +5,7 @@ AI-Native Full Stack Developer assignment.
 
 **Stack:** Next.js (App Router) · TypeScript · Prisma · PostgreSQL · Docker Compose
 
-> Status: work in progress, built phase by phase. See `PLAN.md` for scope and `docs/` for notes.
+> Status: work in progress, built phase by phase. Scope and decisions: `docs/PLAN.md` (written before coding) and `docs/ARCHITECTURE.md`.
 
 ## Run locally (Docker)
 
