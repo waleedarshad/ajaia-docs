@@ -31,3 +31,7 @@ export const ShareSchema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email address"),
   role: z.enum(["EDITOR", "VIEWER"]),
 });
+
+export const CommentSchema = z.object({
+  body: z.string().trim().min(1, "Write something first").max(2000, "Comments are limited to 2000 characters"),
+});

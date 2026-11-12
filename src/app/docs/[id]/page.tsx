@@ -9,6 +9,7 @@ import { TitleEditor } from "@/components/TitleEditor";
 import { DocumentEditor } from "@/components/DocumentEditor";
 import { ShareDialog } from "@/components/ShareDialog";
 import { ExportMenu } from "@/components/ExportMenu";
+import { CommentsPanel } from "@/components/CommentsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
       <h1 className="print-title">{doc.title}</h1>
       {/* key forces a fresh editor if the user navigates between documents */}
       <DocumentEditor key={doc.id} docId={doc.id} initialContent={doc.content as JSONContent} canEdit={editable} />
+      <CommentsPanel key={`c-${doc.id}`} docId={doc.id} />
     </>
   );
 }

@@ -9,8 +9,10 @@ This note explains what I built, what I deliberately did not, and why. The decis
 with their formatting, a real access model enforced on the server, a useful import flow, and something reviewers can
 actually open and test.
 
-**Non-goals (cut on purpose):** real-time multi-user editing (cursors, CRDTs), comments, version history, real
-authentication (sign-up, password reset, SSO), groups or link sharing, PDF export, mobile polish.
+**Non-goals (cut on purpose):** real-time multi-user editing (cursors, CRDTs), comments anchored to text selections or
+suggestion mode, version history, real authentication (sign-up, password reset, SSO), groups or link sharing, mobile polish.
+Two small extras were added late and are deliberately simple: export (Markdown file, PDF through the browser print
+dialog) and a flat comment thread per document.
 Each of these is a project on its own; the brief asked for depth in a few areas over shallow coverage of many.
 
 ## 2. System overview
@@ -44,6 +46,7 @@ Route files contain no business rules; they call services, which is what makes t
 | `User` | seeded demo users | email unique; password stored as salted scrypt hash |
 | `Document` | title + content + owner | `content` is `jsonb` holding TipTap/ProseMirror JSON |
 | `DocumentShare` | (document, user, role) | role `EDITOR` or `VIEWER`; unique per (document, user); cascades on delete |
+| `Comment` | (document, author, body) | flat thread per document, not tied to a text selection; cascades on delete |
 
 Storing the editor's native JSON (not HTML) means formatting round-trips losslessly and the server can validate its
 shape. Migrations are plain SQL under `prisma/migrations`.
@@ -59,6 +62,10 @@ permission helper:
 | Edit content, rename | yes | yes | no (403) | 404 |
 | Share / change / revoke | yes | no (403) | no (403) | 404 |
 | Delete | yes | no (403) | no (403) | 404 |
+
+Comments follow the same rules: anyone who can open a document (including a viewer) can read and post; a comment can be
+deleted by its author or by the document owner. A comment id is always checked against the document in the URL, so a
+comment can't be deleted through another document.
 
 Design choices: people with no access get **404, not 403**, so document ids can't be probed; people who can see a
 document but lack permission get an explicit **403**; the UI hides controls a user can't use, but the server is the
@@ -95,7 +102,7 @@ Docker build). This is enough to enforce access properly for the exercise; it is
 
 - zod validates every request body (title 1 to 120 chars, share email and role, document envelope and size).
 - One error type (`HttpError`) and one handler (`handleApiError`) give consistent JSON errors and status codes.
-- **33 automated tests** (Vitest). The most valuable ones run the *real* sharing and permission code against an in-memory
+- **41 automated tests** (Vitest). The most valuable ones run the *real* sharing and permission code against an in-memory
   fake database: grant, change role, revoke, what each role may do, strangers get 404. Others cover validation and a
   real `.docx` fixture through the importer (headings, bold/italic/underline, lists).
 - Not covered: browser-level end-to-end tests (cut for time); the UI was verified manually.
@@ -119,6 +126,7 @@ Docker build). This is enough to enforce access properly for the exercise; it is
 
 ## 10. Known limitations and risks
 
+- **Comments:** one flat thread per document, no edit, no notifications, no anchoring to text. Enough for review notes, not a full review workflow.
 - **Concurrent editing:** last write wins; there is no merge or presence. Two editors on one document can overwrite each other.
 - **User enumeration:** sharing by email reveals whether an account exists. Acceptable for an internal tool; I'd avoid it with invite links in a public product.
 - **Auth:** demo-grade (shared demo password, no rate limiting, no password reset).
@@ -131,6 +139,6 @@ Docker build). This is enough to enforce access properly for the exercise; it is
 
 1. Browser end-to-end tests (Playwright) for the two-user sharing flow.
 2. Optimistic concurrency (version number on save) with a conflict warning, then presence indicators.
-3. Export to Markdown, then version history.
+3. Version history, then comments anchored to text selections.
 4. Real auth (OIDC) with invite-by-link sharing and an audit trail.
 5. Run migrations in CI/deploy rather than by hand.

@@ -94,3 +94,15 @@ with access to the project folder. All commits reviewed by me before landing.
 - Any role that can read a document can export it; strangers still get 404 from the same access check.
 - Tests: 9 new serializer and filename tests. A test of mine was wrong (a code span starting with a space); I fixed
   the test, not the code.
+
+## P8: Comments
+
+- Second extra, picked after weighing cost: a flat comment thread per document is about 40 minutes, while text-anchored
+  comments need custom editor marks and suggestion mode is a multi-hour feature, so those stay out.
+- Rule I chose: anyone who can open the document can comment, viewers included (otherwise a view-only role is
+  useless for review). Delete is author or owner so the owner can moderate. Strangers still get 404.
+- Hand-wrote the migration (`20261112120000_add_comments`) since Prisma's engine can't be downloaded in the sandbox.
+  It is additive only, so existing data is untouched. Neon needs `npm run db:setup` once to apply it.
+- Tests (8 new, 41 total): all three roles can comment, strangers get 404, delete rules, and a comment can't be
+  deleted through another document's URL. One test failed because my fake database reused ids after a delete; I fixed
+  the fake, not the code.

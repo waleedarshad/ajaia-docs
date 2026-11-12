@@ -37,12 +37,13 @@ To see sharing: sign in as Alice, create a document, click **Share**, add `bob@a
 - Upload `.txt`, `.md` or `.docx` (up to 4 MB) to create a new editable document; clear errors for unsupported files
 - Share with another user by email as **Can edit** or **View only**; change or remove access; viewers get a read-only editor
 - Export to Markdown (file download) and PDF (print stylesheet + browser "Save as PDF"), available to viewers too
+- Comment thread per document; viewers can comment; delete by author or owner
 - Data persists in Postgres (Neon); formatting is preserved as the editor's JSON
-- 33 automated tests; validation and consistent error handling on every API route
+- 41 automated tests; validation and consistent error handling on every API route
 
 ## Intentionally not built (and why)
 
-Real-time collaboration, comments, version history, real authentication, tables and images in imports.
+Real-time collaboration, text-anchored comments and suggestion mode, version history, real authentication, tables and images in imports.
 Prioritised depth in editing, sharing and import over breadth; reasons are in `docs/ARCHITECTURE.md`.
 
 ## Known limitations
