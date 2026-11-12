@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 echo "Applying database migrations..."
-./node_modules/.bin/prisma migrate deploy
+node ./node_modules/prisma/build/index.js migrate deploy
 echo "Seeding demo users..."
 node prisma/seed.js
 echo "Starting server on port ${PORT}..."
