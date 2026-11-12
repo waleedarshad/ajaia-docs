@@ -58,3 +58,17 @@ with access to the project folder. All commits reviewed by me before landing.
   in-memory fake of the database, so they catch wrong rules rather than just wiring: share -> open as grantee, role
   change, revoke, editor can't re-share, viewer can't save or rename, only owner can delete. 18 tests passing.
 - Not verified yet: the dialog's UI behaviour in a browser (manual two-user walkthrough in Docker).
+
+## P5: File upload / import
+- Asked for: upload a file and turn it into a new editable document; state supported types clearly.
+- AI produced: `server/importer.ts` (txt / md / docx -> HTML -> TipTap JSON), upload endpoint, Upload button.
+- Design calls I kept: one pipeline for all formats (anything -> HTML -> parse against the editor schema), so imported
+  content is always valid for the editor and the schema doubles as the sanitiser: scripts, images and unknown tags
+  are dropped rather than trusted. Limits: .txt / .md / .docx only, 5 MB, must contain text, docx must be a real zip.
+  Images and tables in docx are intentionally not imported, and the limits are shown next to the Upload button.
+- What the tests caught: the importer test pulled the database client in through the error types (`http.ts` imported
+  `UnauthorizedError` from `session.ts`). I moved the error class so error types no longer depend on the DB. That
+  coupling would also have made any future unit test of API helpers need a database. Also: one of my own tests
+  compared a Set to an array matcher, a test bug, not a product bug.
+- Verified by: 6 importer tests, including a real .docx fixture with headings, bold/italic/underline and lists
+  (24 tests total passing).

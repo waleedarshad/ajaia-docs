@@ -75,9 +75,13 @@ export async function getDocumentForUser(docId: string, userId: string) {
   return { doc, role: role as Role };
 }
 
-export async function createDocument(userId: string, title?: string) {
+export async function createDocument(userId: string, title?: string, content: unknown = EMPTY_DOC) {
   return prisma.document.create({
-    data: { ownerId: userId, title: title?.trim() || "Untitled document", content: EMPTY_DOC },
+    data: {
+      ownerId: userId,
+      title: title?.trim() || "Untitled document",
+      content: content as Prisma.InputJsonValue,
+    },
     select: { id: true, title: true },
   });
 }

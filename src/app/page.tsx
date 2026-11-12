@@ -4,6 +4,7 @@ import { listDocuments } from "@/server/documents";
 import { formatUpdated } from "@/lib/format";
 import { AppHeader } from "@/components/AppHeader";
 import { NewDocumentButton } from "./NewDocumentButton";
+import { ImportButton } from "./ImportButton";
 import { DocumentCard } from "./DocumentCard";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +21,7 @@ export default async function Dashboard() {
         <div className="page-head">
           <h1>Your documents</h1>
           <div className="page-actions">
+            <ImportButton />
             <NewDocumentButton />
           </div>
         </div>

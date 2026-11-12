@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { UnauthorizedError } from "./session";
 
 export class HttpError extends Error {
   constructor(public status: number, message: string) {
@@ -8,9 +7,15 @@ export class HttpError extends Error {
   }
 }
 
+export class UnauthorizedError extends HttpError {
+  constructor() {
+    super(401, "Not signed in");
+  }
+}
+
 // Every API route funnels through this so error shapes stay consistent.
 export function handleApiError(err: unknown) {
-  if (err instanceof HttpError || err instanceof UnauthorizedError) {
+  if (err instanceof HttpError) {
     return NextResponse.json({ error: err.message }, { status: err.status });
   }
   if (err instanceof ZodError) {

@@ -37,6 +37,18 @@ npm run db:setup                 # apply migrations + seed users
 npm run dev
 ```
 
+## Features
+
+- Create, rename, edit, delete documents; autosave; rich text (bold, italic, underline, H1-H3, bullet and numbered lists)
+- Upload a file to turn it into a new editable document
+- Share a document with another user as **editor** or **viewer**; owned and shared documents are shown separately
+
+### Supported upload types
+
+`.txt`, `.md` (`.markdown`) and `.docx`, up to 5 MB. The file becomes a new document titled after the filename.
+Headings, bold/italic/underline, and lists are preserved; images, tables and other unsupported content in a
+`.docx` are dropped. Anything outside the editor's schema is stripped on import.
+
 ## Scripts
 
 | Command | What it does |

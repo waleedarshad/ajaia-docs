@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { prisma } from "./db";
+import { UnauthorizedError } from "./http";
 
 // Deliberately simple session: an HMAC-signed cookie carrying the user id.
 // Good enough to enforce access on the server for this exercise; not a
@@ -75,11 +76,4 @@ export async function requireUser(): Promise<SessionUser> {
   const user = await getCurrentUser();
   if (!user) throw new UnauthorizedError();
   return user;
-}
-
-export class UnauthorizedError extends Error {
-  status = 401;
-  constructor() {
-    super("Not signed in");
-  }
 }

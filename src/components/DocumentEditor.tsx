@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EditorContent, useEditor, type Editor, type JSONContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { editorExtensions } from "@/lib/editorExtensions";
 
 type Props = {
   docId: string;
@@ -57,7 +57,7 @@ export function DocumentEditor({ docId, initialContent, canEdit }: Props) {
   }, [docId]);
 
   const editor = useEditor({
-    extensions: [StarterKit.configure({ link: false })],
+    extensions: editorExtensions,
     content: initialContent,
     editable: canEdit,
     immediatelyRender: false, // avoid a hydration mismatch with server rendering

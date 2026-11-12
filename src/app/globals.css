@@ -229,3 +229,7 @@ button, input, select {
 .share-actions { display: flex; align-items: center; gap: 8px; }
 .small { font-size: 12.5px; }
 @media (max-width: 560px) { .share-form { grid-template-columns: 1fr; } }
+
+/* Import */
+.import { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.page-actions { flex-wrap: wrap; justify-content: flex-end; }
