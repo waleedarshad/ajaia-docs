@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "./db";
 import { HttpError } from "./http";
 import { canDelete, canEdit, resolveRole, type Role } from "./access";
@@ -86,4 +87,14 @@ export async function deleteDocument(docId: string, userId: string) {
   const { role } = await getDocumentForUser(docId, userId);
   if (!canDelete(role)) throw new HttpError(403, "Only the owner can delete a document");
   await prisma.document.delete({ where: { id: docId } });
+}
+
+export async function saveContent(docId: string, userId: string, content: unknown) {
+  const { role } = await getDocumentForUser(docId, userId);
+  if (!canEdit(role)) throw new HttpError(403, "You have view-only access to this document");
+  return prisma.document.update({
+    where: { id: docId },
+    data: { content: content as Prisma.InputJsonValue },
+    select: { updatedAt: true },
+  });
 }

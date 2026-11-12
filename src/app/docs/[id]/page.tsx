@@ -1,10 +1,12 @@
 import { notFound, redirect } from "next/navigation";
+import type { JSONContent } from "@tiptap/react";
 import { getCurrentUser } from "@/server/session";
 import { getDocumentForUser } from "@/server/documents";
 import { canEdit } from "@/server/access";
 import { HttpError } from "@/server/http";
 import { AppHeader } from "@/components/AppHeader";
 import { TitleEditor } from "@/components/TitleEditor";
+import { DocumentEditor } from "@/components/DocumentEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -21,15 +23,15 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
     throw e;
   }
   const { doc, role } = result;
+  const editable = canEdit(role);
 
   return (
     <>
       <AppHeader user={user}>
-        <TitleEditor docId={doc.id} initialTitle={doc.title} readOnly={!canEdit(role)} />
+        <TitleEditor docId={doc.id} initialTitle={doc.title} readOnly={!editable} />
       </AppHeader>
-      <main className="container">
-        <p className="muted">The editor arrives in the next phase.</p>
-      </main>
+      {/* key forces a fresh editor if the user navigates between documents */}
+      <DocumentEditor key={doc.id} docId={doc.id} initialContent={doc.content as JSONContent} canEdit={editable} />
     </>
   );
 }
