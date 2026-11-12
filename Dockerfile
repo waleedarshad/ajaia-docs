@@ -15,6 +15,9 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 ENV NODE_ENV=production
 ENV PORT=3000
+# Next's standalone server binds to $HOSTNAME, which Docker/Render set to the container id.
+# Force it to listen on all interfaces so the platform's router can reach it.
+ENV HOSTNAME=0.0.0.0
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./

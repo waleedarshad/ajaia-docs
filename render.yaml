@@ -1,5 +1,6 @@
 # Render Blueprint: deploys the app as a Docker web service on the free tier.
 # Database: set DATABASE_URL to a Neon (free) Postgres connection string in the Render dashboard.
+# Use Neon's DIRECT connection string (pooling off, ends in ?sslmode=require): migrations run on boot.
 services:
   - type: web
     name: ajaia-docs

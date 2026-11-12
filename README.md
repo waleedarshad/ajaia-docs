@@ -49,6 +49,15 @@ npm run dev
 Headings, bold/italic/underline, and lists are preserved; images, tables and other unsupported content in a
 `.docx` are dropped. Anything outside the editor's schema is stripped on import.
 
+## Deployment
+
+Deployed as a Docker web service on Render (free tier) with a Neon (free) Postgres database.
+`render.yaml` describes the service; set `DATABASE_URL` to Neon's direct connection string
+(`...?sslmode=require`) in the Render dashboard. Migrations and demo-user seeding run on every boot.
+
+Note: Render's free tier spins the service down after 15 minutes without traffic, so the first request
+after a quiet period can take up to a minute while it wakes up.
+
 ## Scripts
 
 | Command | What it does |
