@@ -5,7 +5,17 @@ AI-Native Full Stack Developer assignment.
 
 **Stack:** Next.js (App Router) · TypeScript · Prisma · PostgreSQL · Docker Compose
 
-> Status: work in progress, built phase by phase. Scope and decisions: `docs/PLAN.md` (written before coding) and `docs/ARCHITECTURE.md`.
+**Live demo:** https://ajaia-docs-nu-blue.vercel.app/ (demo accounts below)
+
+Built phase by phase, one commit per phase. Where to look: `SUBMISSION.md` (what's included and what works),
+`docs/ARCHITECTURE.md` (design and decisions), `docs/AI_WORKFLOW.md` (how AI was used), and `docs/PLAN.md`
+(the scope plan, written before coding).
+
+## Try the sharing flow
+
+Sign in as Alice, create a document and click **Share**: add `bob@ajaia.test` (Can edit) and `carol@ajaia.test`
+(View only). Then sign in as Bob or Carol in a private window. Bob can edit, Carol gets a read-only editor, and
+removing Carol's access makes the document disappear for her.
 
 ## Run locally (Docker)
 
@@ -67,6 +77,11 @@ To deploy your own copy:
 
 Vercel has no startup hook, so migrations are a deliberate one-time step rather than running on every boot.
 Re-run `npm run db:setup` against Neon whenever the schema changes.
+
+## Tests
+
+`npm test` runs 24 Vitest tests: the sharing and permission rules (against an in-memory fake database), request
+validation, and the file importer (including a real `.docx` fixture). There are no browser end-to-end tests.
 
 ## Scripts
 

@@ -1,6 +1,8 @@
 # Ajaia Assignment: Build Plan (Collaborative Doc Editor)
 
-Status: DRAFT for approval. Nothing is built yet. Time budget: ~230 min from plan approval.
+This is the plan I wrote **before any code** (kept as written, apart from the two deviations below).
+Deviations during the build: deployment moved from Render to **Vercel** (Render asked for a credit card), and the
+upload limit became **4 MB** (Vercel's request-body cap). See `docs/ARCHITECTURE.md` for the final design.
 
 ## 1. Product slice (what "good" looks like)
 A lightweight Google-Docs-style editor, "Ajaia Docs", for a small team.

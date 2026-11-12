@@ -1,0 +1,15 @@
+4898b19  2026-11-12  Add initial build plan and gitignore
+4457869  2026-11-12  Scaffold Next.js app with Prisma schema, Docker setup and seeded login
+0e2cae1  2026-11-12  Move Postgres host port to 5433 to avoid local conflicts
+456d728  2026-11-12  Stop publishing Postgres on the host by default
+0d18311  2026-11-12  Fix Prisma CLI path in the Docker image
+a1d5297  2026-11-12  Install the Prisma CLI in its own folder inside the image
+18e37a9  2026-11-12  Add documents dashboard with create, rename and delete
+e0e5e06  2026-11-12  Add TipTap rich-text editor with autosave
+9088d83  2026-11-12  Add document sharing with editor and viewer roles
+23859cd  2026-11-12  Add file upload: turn .txt, .md and .docx files into documents
+52ac240  2026-11-12  Prepare Docker image and Render config for deployment
+8e20c89  2026-11-12  Ignore .env.local files
+9f13cd2  2026-11-12  Switch deployment target from Render to Vercel
+37129c2  2026-11-12  Generate the Prisma client in db:setup and db:seed
+9ba4e86  2026-11-12  Add architecture note, AI workflow note and submission summary
