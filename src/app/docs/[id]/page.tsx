@@ -8,6 +8,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { TitleEditor } from "@/components/TitleEditor";
 import { DocumentEditor } from "@/components/DocumentEditor";
 import { ShareDialog } from "@/components/ShareDialog";
+import { ExportMenu } from "@/components/ExportMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
     <>
       <AppHeader user={user}>
         <TitleEditor docId={doc.id} initialTitle={doc.title} readOnly={!editable} />
+        <ExportMenu docId={doc.id} />
         {role === "OWNER" ? (
           <ShareDialog docId={doc.id} />
         ) : (
@@ -38,6 +40,7 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
           </span>
         )}
       </AppHeader>
+      <h1 className="print-title">{doc.title}</h1>
       {/* key forces a fresh editor if the user navigates between documents */}
       <DocumentEditor key={doc.id} docId={doc.id} initialContent={doc.content as JSONContent} canEdit={editable} />
     </>

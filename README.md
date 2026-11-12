@@ -51,6 +51,7 @@ npm run dev
 
 - Create, rename, edit, delete documents; autosave; rich text (bold, italic, underline, H1-H3, bullet and numbered lists)
 - Upload a file to turn it into a new editable document
+- Export any document you can open to **Markdown** (`.md` download) or **PDF** (browser print dialog, "Save as PDF")
 - Share a document with another user as **editor** or **viewer**; owned and shared documents are shown separately
 
 ### Supported upload types

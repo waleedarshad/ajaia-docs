@@ -13,6 +13,6 @@ Say it in your own words; these are talking points, not lines to read.
 | 2:00 | Open a doc, Share, add bob (Can edit) and carol (View only) | "Sharing is by email with two roles. Only the owner manages sharing." |
 | 2:30 | Private window: Bob sees it under Shared with me and edits; Carol sees a read-only editor | "Editors can edit, viewers are read-only, and the server enforces it, not just the UI." |
 | 3:05 | Back as Alice: remove Carol; refresh Carol's page: "not found" | "Revoking takes effect immediately; users with no access get a 404 so ids can't be probed." |
-| 3:20 | Slide or the README/architecture file | "Deliberate cuts: real-time collaboration, comments, version history, real auth. Key decisions: one Next.js app with a service layer, access rules in one pure function with 24 tests, Docker Compose locally, Vercel and Neon in production." |
+| 3:20 | Slide or the README/architecture file | "Deliberate cuts: real-time collaboration, comments, version history, real auth. Key decisions: one Next.js app with a service layer, access rules in one pure function with 33 tests, Docker Compose locally, Vercel and Neon in production." |
 | 3:50 | docs/AI_WORKFLOW.md | "I used Claude phase by phase and approved each step. It sped up scaffolding, the editor and tests. I rejected a separate backend and real-time collaboration, caught a coupling bug through tests, and moved off Render when it asked for a card. I ran Docker and the database myself to verify." |
 | 4:20 | End | "Next with more time: Playwright tests, conflict warnings, export, real auth." |

@@ -82,3 +82,15 @@ with access to the project folder. All commits reviewed by me before landing.
   output on Vercel; dropped the upload limit from 5 MB to 4 MB because Vercel caps request bodies at ~4.5 MB;
   migrations and seeding became a one-time `npm run db:setup` against Neon since Vercel has no boot hook.
 - The Docker image is kept for local runs and as a portable production image.
+
+## P7: Export to Markdown and PDF
+
+- Chose export as the cheapest extra that is still visible in a demo: it only reads data, so no migration and no risk
+  to existing documents.
+- Markdown comes from a small pure serializer (`src/server/exporter.ts`) that walks the editor JSON. It covers exactly
+  the nodes the editor schema can produce; underline has no Markdown form so it is written as `<u>`.
+- PDF is the browser's print dialog with a print stylesheet that hides the header and toolbar. A server-side PDF engine
+  (headless Chrome) would be heavy and fragile on Vercel, and this gives the same result with no extra dependency.
+- Any role that can read a document can export it; strangers still get 404 from the same access check.
+- Tests: 9 new serializer and filename tests. A test of mine was wrong (a code span starting with a space); I fixed
+  the test, not the code.

@@ -233,3 +233,16 @@ button, input, select {
 /* Import */
 .import { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .page-actions { flex-wrap: wrap; justify-content: flex-end; }
+
+/* Export */
+.export-menu { display: flex; gap: 6px; }
+.print-title { display: none; }
+
+/* "Export PDF" uses the browser print dialog, so print only the document itself. */
+@media print {
+  .app-header, .toolbar, .save-status { display: none !important; }
+  body { background: #fff; }
+  .editor-page { background: #fff; }
+  .sheet { box-shadow: none; border: 0; margin: 0; padding: 0; max-width: none; }
+  .print-title { display: block; font-size: 28px; margin: 0 0 16px; }
+}

@@ -95,7 +95,7 @@ Docker build). This is enough to enforce access properly for the exercise; it is
 
 - zod validates every request body (title 1 to 120 chars, share email and role, document envelope and size).
 - One error type (`HttpError`) and one handler (`handleApiError`) give consistent JSON errors and status codes.
-- **24 automated tests** (Vitest). The most valuable ones run the *real* sharing and permission code against an in-memory
+- **33 automated tests** (Vitest). The most valuable ones run the *real* sharing and permission code against an in-memory
   fake database: grant, change role, revoke, what each role may do, strangers get 404. Others cover validation and a
   real `.docx` fixture through the importer (headings, bold/italic/underline, lists).
 - Not covered: browser-level end-to-end tests (cut for time); the UI was verified manually.
