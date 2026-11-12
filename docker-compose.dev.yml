@@ -1,0 +1,6 @@
+# Optional override for running the app outside Docker (npm run dev).
+# Publishes Postgres on the host. Change DB_PORT if 5433 is already taken.
+services:
+  db:
+    ports:
+      - "${DB_PORT:-5433}:5432"

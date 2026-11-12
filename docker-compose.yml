@@ -5,8 +5,6 @@ services:
       POSTGRES_USER: ajaia
       POSTGRES_PASSWORD: ajaia
       POSTGRES_DB: ajaia
-    ports:
-      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

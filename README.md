@@ -30,7 +30,7 @@ All use the password `demo1234`.
 ## Run locally (without Docker for the app)
 
 ```bash
-docker compose up -d db          # just Postgres (exposed on host port 5433)
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db   # just Postgres, on host port 5433 (set DB_PORT to change)
 cp .env.example .env
 npm install
 npm run db:setup                 # apply migrations + seed users
