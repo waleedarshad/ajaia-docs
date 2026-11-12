@@ -6,7 +6,8 @@ import { HttpError } from "./http";
 import { MAX_CONTENT_CHARS } from "./validation";
 
 export const SUPPORTED_EXTENSIONS = [".txt", ".md", ".markdown", ".docx"] as const;
-export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+// Vercel serverless functions cap request bodies at about 4.5 MB, so stay safely under that.
+export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 export type ImportedDocument = { title: string; content: Record<string, unknown> };
 
@@ -54,7 +55,7 @@ export async function convertFileToDoc(filename: string, buffer: Buffer): Promis
     throw new HttpError(415, "Unsupported file type. Upload a .txt, .md or .docx file.");
   }
   if (buffer.length === 0) throw new HttpError(400, "That file is empty.");
-  if (buffer.length > MAX_UPLOAD_BYTES) throw new HttpError(413, "File is too large. The limit is 5 MB.");
+  if (buffer.length > MAX_UPLOAD_BYTES) throw new HttpError(413, "File is too large. The limit is 4 MB.");
 
   let html: string;
   if (ext === ".docx") {

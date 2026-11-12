@@ -32,10 +32,10 @@ A lightweight Google-Docs-style editor, "Ajaia Docs", for a small team.
 | D7 | Auth | **Mocked-but-real session**: 3 seeded users, login page with demo password, signed httpOnly cookie | Satisfies "simulate users" while still enforcing access on the server | Not production auth; stated clearly |
 | D8 | Sharing model | `Document.ownerId` + `DocumentShare(documentId, userId, role: EDITOR|VIEWER)` | Minimal, clear, testable. Role is cheap and shows intent | No groups/links |
 | D9 | Access enforcement | Single `getDocumentAccess(userId, docId)` function used by every route | One place to test, no scattered checks | |
-| D10 | Upload | `.txt`, `.md`, `.docx` -> new doc. `mammoth` (docx->HTML) and `marked` (md->HTML), then HTML -> TipTap JSON. 5 MB limit, type allowlist | Product-relevant import flow; limited, honest scope | Complex docx (tables, images) is dropped; documented |
+| D10 | Upload | `.txt`, `.md`, `.docx` -> new doc. `mammoth` (docx->HTML) and `marked` (md->HTML), then HTML -> TipTap JSON. 4 MB limit (Vercel request-body cap), type allowlist | Product-relevant import flow; limited, honest scope | Complex docx (tables, images) is dropped; documented |
 | D11 | Saving | Debounced autosave (~1s) + "Saved/Saving..." indicator | Feels like a real editor; simple PUT | Last write wins (no merge); documented |
 | D12 | Testing | **Vitest**: access-control unit tests + import conversion test; optional one API test | Highest-value logic gets tested | No e2e browser tests (cut for time) |
-| D13 | Deploy | **Render** (Docker web service, free) + **Neon** Postgres (free), or Fly/Railway as fallback | Free for reviewers, Docker-based so same image as local | Free tier cold starts (~30-60s); note in README |
+| D13 | Deploy | **Vercel** (Hobby) + **Neon** Postgres (free) | Free, no card, native Next.js hosting, no cold-start wait for reviewers. *Changed from Render during the build: Render asks for a card to deploy a web service.* | Migrations/seed become a one-time manual step (no boot hook); uploads capped at 4 MB by Vercel's request-body limit |
 | D14 | Repo layout | Single repo, `docker-compose.yml` (app + postgres), `.env.example`, `docs/` | Easy review | |
 
 ## 3. Data model
@@ -61,7 +61,7 @@ Each phase ends with: what changed, how it works, how to verify. You approve bef
 | P3 Editor + autosave | 40 | TipTap toolbar, autosave, reopen | Format text, refresh, formatting persists |
 | P4 Sharing + access logic | 35 | Share modal, roles, badges, read-only viewer, tests | Alice shares to Bob; Bob sees it; viewer can't edit |
 | P5 Upload/import | 25 | .txt/.md/.docx -> new doc, UI messaging, tests | Upload sample files |
-| P6 Deploy | 25 | Live URL on Render + Neon | Reviewer flow works on live URL |
+| P6 Deploy | 25 | Live URL on Vercel + Neon | Reviewer flow works on live URL |
 | P7 Docs + video | 35 | README, ARCHITECTURE.md, AI_WORKFLOW.md, SUBMISSION.md, screenshots, video | Checklist below |
 | Buffer | 10 | | |
 
@@ -85,12 +85,12 @@ Each phase ends with: what changed, how it works, how to verify. You approve bef
 - Verification: run tests, manual two-user sharing walkthrough, check refresh persistence, check unauthorized access returns 403/404.
 
 ## 8. Reviewer message (send when you start, ~2 min)
-> Hi team, I've started the assignment. My approach: Next.js + TypeScript, TipTap editor, Postgres via Docker Compose, deployed on Render/Neon free tiers. I'm prioritising end-to-end core flows (create/edit/save, import from .txt/.md/.docx, owner-to-user sharing with roles) over breadth, and I'm using AI tooling for scaffolding and tests while reviewing and verifying each step myself. I'll document my scope cuts, AI usage, and verification in the submission. — Waleed
+> Hi team, I've started the assignment. My approach: Next.js + TypeScript, TipTap editor, Postgres via Docker Compose, deployed on Vercel/Neon free tiers. I'm prioritising end-to-end core flows (create/edit/save, import from .txt/.md/.docx, owner-to-user sharing with roles) over breadth, and I'm using AI tooling for scaffolding and tests while reviewing and verifying each step myself. I'll document my scope cuts, AI usage, and verification in the submission. — Waleed
 
 ## 9. Video outline (3 min)
 0:00 Goal + scope (20s) | 0:20 Login as Alice, create/format/rename doc, refresh (45s) | 1:05 Upload .md/.docx -> editable doc (30s) | 1:35 Share to Bob, switch user, show shared badge + read-only/editable (45s) | 2:20 Architecture + cuts (30s) | 2:50 How AI helped + what I'd do next (20s)
 
 ## 10. Risks
-- Free-tier cold start on live URL -> mention in README, open the URL before the video.
+- Neon scales to zero when idle, so the first request after a quiet period can be a little slower -> open the live URL before recording the video.
 - docx import fidelity -> limited scope, documented.
 - Docker not tested in my sandbox (I have no Docker here) -> you run `docker compose up` on your Mac at each phase; that is also your verification step.

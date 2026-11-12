@@ -15,7 +15,7 @@ with access to the project folder. All commits reviewed by me before landing.
 
 ## P1: Scaffold, Docker, auth
 - Asked for: Next.js + Prisma scaffold, Docker Compose, seeded users, signed-cookie session.
-- AI produced: schema, session helpers, login page, Dockerfile, compose file, Render blueprint.
+- AI produced: schema, session helpers, login page, Dockerfile, compose file, Render blueprint (later dropped, see P6).
 - I changed/rejected: avoided bcrypt (native dep that complicates Alpine builds) in favour of Node's built-in
   scrypt; kept the Prisma CLI in the runtime image so migrations run on boot instead of a separate job.
 - What went wrong: the first `docker compose up` failed three times, all in the image, not the app. Port 5432 was
@@ -72,3 +72,13 @@ with access to the project folder. All commits reviewed by me before landing.
   compared a Set to an array matcher, a test bug, not a product bug.
 - Verified by: 6 importer tests, including a real .docx fixture with headings, bold/italic/underline and lists
   (24 tests total passing).
+
+## P6: Deployment (and a change of plan)
+- Plan was Render (Docker) + Neon. When I created the service Render asked for a credit card, which the brief rules
+  out ("do not require reviewers to pay"), and which I didn't want to depend on either. Sources disagreed on this
+  (Render's docs say no card; one independent test said a card is required), so I tested it for real instead of
+  trusting either.
+- Switched to Vercel (Hobby, no card) + Neon. Consequences I handled: removed `render.yaml`; skipped Next's standalone
+  output on Vercel; dropped the upload limit from 5 MB to 4 MB because Vercel caps request bodies at ~4.5 MB;
+  migrations and seeding became a one-time `npm run db:setup` against Neon since Vercel has no boot hook.
+- The Docker image is kept for local runs and as a portable production image.

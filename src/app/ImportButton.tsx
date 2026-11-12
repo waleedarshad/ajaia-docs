@@ -36,7 +36,7 @@ export function ImportButton() {
       <button className="btn" onClick={() => input.current?.click()} disabled={busy}>
         {busy ? "Importing…" : "Upload file"}
       </button>
-      <span className="muted small">.txt, .md or .docx · up to 5 MB</span>
+      <span className="muted small">.txt, .md or .docx · up to 4 MB</span>
       {error && <span className="error" role="alert">{error}</span>}
     </div>
   );

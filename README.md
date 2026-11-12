@@ -45,18 +45,28 @@ npm run dev
 
 ### Supported upload types
 
-`.txt`, `.md` (`.markdown`) and `.docx`, up to 5 MB. The file becomes a new document titled after the filename.
+`.txt`, `.md` (`.markdown`) and `.docx`, up to 4 MB. The file becomes a new document titled after the filename.
 Headings, bold/italic/underline, and lists are preserved; images, tables and other unsupported content in a
 `.docx` are dropped. Anything outside the editor's schema is stripped on import.
 
 ## Deployment
 
-Deployed as a Docker web service on Render (free tier) with a Neon (free) Postgres database.
-`render.yaml` describes the service; set `DATABASE_URL` to Neon's direct connection string
-(`...?sslmode=require`) in the Render dashboard. Migrations and demo-user seeding run on every boot.
+Hosted on **Vercel** (Hobby plan) with a **Neon** Postgres database, both free and without a card.
+Docker Compose is the local run path; the `Dockerfile` also builds a production image of the same app.
 
-Note: Render's free tier spins the service down after 15 minutes without traffic, so the first request
-after a quiet period can take up to a minute while it wakes up.
+To deploy your own copy:
+
+1. Create a Neon project and copy the **direct** connection string (connection pooling off, ends in `?sslmode=require`).
+2. Apply migrations and seed the demo users once, from your machine:
+   ```bash
+   npm install
+   DATABASE_URL='<neon connection string>' npm run db:setup
+   ```
+3. Import the repo in Vercel and set the environment variables `DATABASE_URL`, `SESSION_SECRET`
+   (any long random string) and `DEMO_PASSWORD` (the shared demo password, e.g. `demo1234`), then deploy.
+
+Vercel has no startup hook, so migrations are a deliberate one-time step rather than running on every boot.
+Re-run `npm run db:setup` against Neon whenever the schema changes.
 
 ## Scripts
 

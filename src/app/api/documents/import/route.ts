@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     }
     const file = form.get("file");
     if (!(file instanceof File)) throw new HttpError(400, "No file was uploaded.");
-    if (file.size > MAX_UPLOAD_BYTES) throw new HttpError(413, "File is too large. The limit is 5 MB.");
+    if (file.size > MAX_UPLOAD_BYTES) throw new HttpError(413, "File is too large. The limit is 4 MB.");
 
     const { title, content } = await convertFileToDoc(file.name, Buffer.from(await file.arrayBuffer()));
     const doc = await createDocument(user.id, title, content);
