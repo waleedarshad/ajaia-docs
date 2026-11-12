@@ -22,7 +22,10 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+# Prisma CLI lives in its own folder with a proper install, so all of its
+# dependencies come along (copying individual packages out of node_modules is brittle).
+RUN mkdir -p /opt/prisma-cli && cd /opt/prisma-cli && npm init -y >/dev/null && npm install prisma@6.19.3 --no-audit --no-fund
+
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
