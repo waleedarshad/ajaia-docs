@@ -9,6 +9,7 @@ export type DocumentSummary = {
   id: string;
   title: string;
   updatedAt: Date;
+  shareCount: number;
 };
 
 export type SharedDocumentSummary = DocumentSummary & {
@@ -21,7 +22,7 @@ export async function listDocuments(userId: string) {
     prisma.document.findMany({
       where: { ownerId: userId },
       orderBy: { updatedAt: "desc" },
-      select: { id: true, title: true, updatedAt: true },
+      select: { id: true, title: true, updatedAt: true, _count: { select: { shares: true } } },
     }),
     prisma.document.findMany({
       where: { shares: { some: { userId } } },
@@ -40,11 +41,19 @@ export async function listDocuments(userId: string) {
     id: d.id,
     title: d.title,
     updatedAt: d.updatedAt,
+    shareCount: 0,
     ownerName: d.owner.name,
     role: d.shares[0].role,
   }));
 
-  return { owned: owned as DocumentSummary[], shared: sharedWithMe };
+  const ownedByMe: DocumentSummary[] = owned.map((d) => ({
+    id: d.id,
+    title: d.title,
+    updatedAt: d.updatedAt,
+    shareCount: d._count.shares,
+  }));
+
+  return { owned: ownedByMe, shared: sharedWithMe };
 }
 
 // Loads a document and the caller's role in one go. Users without access get a 404

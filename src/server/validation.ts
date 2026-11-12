@@ -26,3 +26,8 @@ export const SaveContentSchema = z
     message: "Document is too large to save (limit is about 1 MB)",
     path: ["content"],
   });
+
+export const ShareSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email address"),
+  role: z.enum(["EDITOR", "VIEWER"]),
+});

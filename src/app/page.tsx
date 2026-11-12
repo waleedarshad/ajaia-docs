@@ -31,7 +31,7 @@ export default async function Dashboard() {
           ) : (
             <div className="doc-grid">
               {owned.map((d) => (
-                <DocumentCard key={d.id} id={d.id} title={d.title} updated={formatUpdated(d.updatedAt)} />
+                <DocumentCard key={d.id} id={d.id} title={d.title} updated={formatUpdated(d.updatedAt)} shareCount={d.shareCount} />
               ))}
             </div>
           )}

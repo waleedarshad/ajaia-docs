@@ -7,6 +7,7 @@ import { HttpError } from "@/server/http";
 import { AppHeader } from "@/components/AppHeader";
 import { TitleEditor } from "@/components/TitleEditor";
 import { DocumentEditor } from "@/components/DocumentEditor";
+import { ShareDialog } from "@/components/ShareDialog";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,13 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
     <>
       <AppHeader user={user}>
         <TitleEditor docId={doc.id} initialTitle={doc.title} readOnly={!editable} />
+        {role === "OWNER" ? (
+          <ShareDialog docId={doc.id} />
+        ) : (
+          <span className="badge badge-shared">
+            Shared by {doc.owner.name} · {role === "EDITOR" ? "Can edit" : "View only"}
+          </span>
+        )}
       </AppHeader>
       {/* key forces a fresh editor if the user navigates between documents */}
       <DocumentEditor key={doc.id} docId={doc.id} initialContent={doc.content as JSONContent} canEdit={editable} />

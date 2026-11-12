@@ -10,9 +10,11 @@ type Props = {
   updated: string;
   // Present only for documents shared with the current user.
   shared?: { ownerName: string; role: "EDITOR" | "VIEWER" };
+  // For owned documents: how many people it is shared with.
+  shareCount?: number;
 };
 
-export function DocumentCard({ id, title, updated, shared }: Props) {
+export function DocumentCard({ id, title, updated, shared, shareCount = 0 }: Props) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -44,7 +46,9 @@ export function DocumentCard({ id, title, updated, shared }: Props) {
             Shared by {shared.ownerName} · {shared.role === "EDITOR" ? "Can edit" : "View only"}
           </span>
         ) : (
-          <span className="badge badge-owned">Owned by you</span>
+          <span className="badge badge-owned">
+            Owned by you{shareCount > 0 ? ` · Shared with ${shareCount}` : ""}
+          </span>
         )}
         {!shared &&
           (confirming ? (

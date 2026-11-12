@@ -45,3 +45,16 @@ with access to the project folder. All commits reviewed by me before landing.
 - Rejected: real-time/CRDT collaboration (out of scope); disabling StarterKit's link extension since links weren't
   asked for.
 - Verified by: validation unit tests (5 passing), type-check on the component, manual format-and-refresh test.
+
+## P4: Sharing
+- Asked for: owner can grant another user access by email with a role (editor / view only), see and change who has
+  access, and revoke it; shared docs visibly distinct on the dashboard; viewers read-only.
+- AI produced: `server/sharing.ts`, share API routes, `ShareDialog`, badges.
+- Design calls I kept: owner-only management (editors can't re-share); sharing is an upsert so picking a new role
+  changes the existing share instead of erroring; unknown email returns a clear error, which does reveal that an
+  account exists, acceptable for an internal tool and noted as a tradeoff; a stranger gets 404, a collaborator who
+  lacks permission gets 403.
+- What I tested and how: rather than mock individual functions, the tests run the real permission code on top of an
+  in-memory fake of the database, so they catch wrong rules rather than just wiring: share -> open as grantee, role
+  change, revoke, editor can't re-share, viewer can't save or rename, only owner can delete. 18 tests passing.
+- Not verified yet: the dialog's UI behaviour in a browser (manual two-user walkthrough in Docker).
